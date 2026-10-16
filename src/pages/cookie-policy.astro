@@ -1,0 +1,13 @@
+---
+import Base from '../layouts/Base.astro';
+import Blocks from '../components/site/Blocks.astro';
+import { cookies as d } from '../data/site';
+---
+<Base title={d.title} description={d.description}>
+  <section class="lg dark" data-header-theme="dark"><div class="container"><p class="label o">{d.sub}</p><h1 class="display d-2">{d.heading}</h1></div></section>
+  <section class="paper sec"><div class="container"><Blocks blocks={d.blocks} /></div></section>
+</Base>
+<style>
+  .lg { padding-top: calc(var(--header-h) + var(--strip-h) + clamp(32px, 6vw, 80px)); padding-bottom: clamp(40px, 5vw, 72px); }
+  .lg .container { display: grid; gap: 14px; }
+</style>

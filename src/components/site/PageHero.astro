@@ -1,0 +1,39 @@
+---
+import Img from './Img.astro';
+import Icon from './Icon.astro';
+import { telHref, quoteHref, mailHref } from '../../data/extra';
+import { phones } from '../../data/site';
+interface Props { label: string; heading: [string, string]; photo?: string; photoAlt?: string; crumbs?: { href: string; label: string }[]; service?: string; subject?: string }
+const { label, heading, photo, photoAlt = '', crumbs = [], service, subject } = Astro.props;
+---
+<section class="ph-hero dark" data-header-theme="dark">
+  <div class="container ph-hero__grid">
+    <div class="ph-hero__copy">
+      {crumbs.length > 0 && (
+        <nav class="label ph-hero__crumbs" aria-label="Breadcrumb">
+          <a href="/" class="ul">Home</a>{crumbs.map((c) => <><span aria-hidden="true">/</span><a href={c.href} class="ul">{c.label}</a></>)}
+        </nav>
+      )}
+      <p class="label o">{label}</p>
+      <h1 class="display d-2" data-reveal="lines"><span class="line"><span>{heading[0]}</span></span><span class="line"><span class="o">{heading[1]}</span></span></h1>
+      <div class="ph-hero__lead" data-reveal="fade"><slot /></div>
+      <div class="ph-hero__acts" data-reveal="fade" data-delay="0.1">
+        <a href={quoteHref(service)} class="btn btn--orange">Online Quote <Icon name="arrow" /></a>
+        <a href={telHref()} class="btn btn--line"><Icon name="phone" /> {phones.free.display}</a>
+        <a href={mailHref(subject)} class="btn btn--line"><Icon name="mail" /> Email Us</a>
+      </div>
+    </div>
+    {photo && <div class="ph ph-hero__ph" data-reveal="photo"><Img id={photo} alt={photoAlt} eager sizes="(max-width: 900px) 100vw, 42vw" /></div>}
+  </div>
+</section>
+<style>
+  .ph-hero { padding-top: calc(var(--header-h) + var(--strip-h) + clamp(32px, 6vw, 80px)); padding-bottom: clamp(48px, 7vw, 100px); }
+  .ph-hero__grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 40px clamp(32px, 5vw, 96px); align-items: end; }
+  .ph-hero__copy { display: grid; gap: 18px; }
+  .ph-hero__crumbs { display: flex; flex-wrap: wrap; gap: 8px; color: var(--mute); }
+  .ph-hero__lead { color: #d6d6d9; font-size: var(--fs-lead); max-width: 56ch; display: grid; gap: 1em; }
+  .ph-hero__acts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+  .ph-hero__ph { aspect-ratio: 4 / 5; max-height: 72vh; }
+  @media (max-width: 899px) { .ph-hero__grid { grid-template-columns: minmax(0, 1fr); } .ph-hero__ph { aspect-ratio: 4 / 3; } }
+  @media (max-width: 480px) { .ph-hero__acts .btn { flex: 1 1 100%; } }
+</style>

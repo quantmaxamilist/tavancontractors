@@ -1,0 +1,72 @@
+---
+import Icon from './Icon.astro';
+import { services, areas, phones, email, company, footer } from '../../data/site';
+import { telHref, mailHref, wrapSlash } from '../../data/extra';
+const year = new Date().getFullYear();
+---
+<footer class="ftr dark" data-header-theme="dark">
+  <div class="container ftr__grid">
+    <div class="ftr__brand">
+      <a href="/" aria-label="Tavan Contractors — home"><img src="/brand/tavan-badge-256.webp" width="256" height="256" alt="Tavan Contractors — Domestic & Commercial Roofing" loading="lazy" /></a>
+      <address>
+        {company.address.map((l) => <span>{l}</span>)}
+      </address>
+      <div class="ftr__social">
+        <a href={company.social.facebook} target="_blank" rel="noopener" aria-label="Tavan Contractors on Facebook"><Icon name="facebook" /></a>
+        <a href={company.social.instagram} target="_blank" rel="noopener" aria-label="Tavan Contractors on Instagram"><Icon name="instagram" /></a>
+      </div>
+    </div>
+    <nav aria-label={footer.servicesHead}>
+      <h2 class="label o">{footer.servicesHead}</h2>
+      <ul role="list">
+        {services.map((s) => <li><a class="ul" href={`/services/${s.slug}`}>{wrapSlash(s.name)}</a></li>)}
+        <li class="ftr__gap"><a class="ul" href="/commercial">Commercial Services</a></li>
+        <li><a class="ul" href="/our-work">Our Work</a></li>
+        <li><a class="ul" href="/blog">Blog</a></li>
+      </ul>
+    </nav>
+    <div>
+      <h2 class="label o">{footer.areasHead}</h2>
+      <ul role="list">{areas.map((a) => <li>{a}</li>)}</ul>
+    </div>
+    <div>
+      <h2 class="label o">{footer.contactHead}</h2>
+      <ul role="list" class="ftr__contact">
+        {Object.values(phones).map((p) => (
+          <li><a class="ul" href={telHref(p)}><span class="label mute">{p.label}</span>{p.display}</a></li>
+        ))}
+        <li><a class="ul" href={mailHref()}><span class="label mute">Email</span>{email}</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container ftr__base">
+    <a class="ul" href="/privacy-policy">{footer.privacy}</a>
+    <a class="ul" href="/cookie-policy">{footer.cookies}</a>
+    <span>{footer.companyNumber}</span>
+    <span>© {year} {company.legal}</span>
+  </div>
+</footer>
+
+<style>
+  .ftr { padding-top: clamp(64px, 8vw, 112px); padding-bottom: 28px; }
+  .ftr__grid { display: grid; grid-template-columns: 1.1fr 1fr 0.8fr 1.1fr; gap: 40px 32px; }
+  .ftr__brand img { width: 112px; height: 112px; }
+  .ftr address { font-style: normal; display: grid; margin-top: 20px; color: var(--mute); }
+  .ftr__social { display: flex; gap: 10px; margin-top: 18px; }
+  .ftr__social a { width: 40px; height: 40px; border: 1px solid var(--line-d); border-radius: 50%; display: grid; place-items: center; transition: background-color var(--t-fast), border-color var(--t-fast); }
+  .ftr__social a:hover { background: var(--orange); border-color: var(--orange); color: var(--black); }
+  .ftr__social svg { width: 18px; height: 18px; }
+  .ftr h2 { margin-bottom: 18px; }
+  .ftr ul { list-style: none; padding: 0; display: grid; gap: 8px; color: #d9d9dc; }
+  .ftr__gap { margin-top: 10px; }
+  .ftr__contact a { display: grid; }
+  .ftr__contact li + li { margin-top: 6px; }
+  .ftr__contact .label { font-size: 0.64rem; }
+  .ftr__base { display: flex; flex-wrap: wrap; gap: 10px 28px; margin-top: clamp(48px, 6vw, 88px); padding-top: 22px; border-top: 1px solid var(--line-d); font-size: 0.84rem; color: var(--mute); }
+  .ftr__base span:last-child { margin-left: auto; }
+  @media (max-width: 999px) { .ftr__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 559px) {
+    .ftr__grid { grid-template-columns: minmax(0, 1fr); }
+    .ftr__base span:last-child { margin-left: 0; }
+  }
+</style>

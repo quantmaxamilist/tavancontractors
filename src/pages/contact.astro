@@ -1,0 +1,94 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/site/Icon.astro';
+import Img from '../components/site/Img.astro';
+import { contactPage, phones, email, company, areas } from '../data/site';
+import { telHref, mailHref, formServices, wrapSlash } from '../data/extra';
+---
+<Base title={contactPage.title} description={contactPage.description}>
+  <section class="ct dark" data-header-theme="dark">
+    <div class="container ct__grid">
+      <div class="ct__info">
+        <p class="label o">Free no-obligation quote</p>
+        <h1 class="display d-2" data-reveal="lines"><span class="line"><span>{contactPage.heading[0]} <span class="o">{contactPage.heading[1]}</span></span></span></h1>
+        <ul class="ct__nums" role="list">
+          {Object.values(phones).map((p) => (
+            <li><a href={telHref(p)}><span class="label mute">{p.label}</span><span class="ct__n">{p.display}</span></a></li>
+          ))}
+          <li><a href={mailHref()}><span class="label mute">Email</span><span class="ct__n ct__mail">{email}</span></a></li>
+        </ul>
+        <address><span class="label mute">Address</span>{company.address.map((l) => <span>{l}</span>)}</address>
+        <p class="mute ct__areas">{areas.join(' · ')}</p>
+        <div class="ph ct__ph"><Img id={contactPage.hero} alt="Tavan roofing work on a family home" sizes="(max-width: 900px) 100vw, 40vw" eager /></div>
+      </div>
+      <form class="ct__form" id="quote" data-quote novalidate>
+        <fieldset>
+          <legend class="label o">Which services?</legend>
+          <div class="ct__ticks">
+            {formServices.map((s) => (
+              <label class="tick"><input type="checkbox" name="service" value={s.label} data-slug={s.slug} /><span><Icon name="check" /></span>{wrapSlash(s.label)}</label>
+            ))}
+          </div>
+        </fieldset>
+        <label class="fld"><span>{contactPage.fields.name}</span><input name="name" autocomplete="name" required /></label>
+        <label class="fld"><span>{contactPage.fields.email}</span><input name="email" type="email" autocomplete="email" required /></label>
+        <label class="fld"><span>{contactPage.fields.phone}</span><input name="phone" type="tel" autocomplete="tel" /></label>
+        <label class="fld"><span>Message</span><textarea name="message" rows="5" placeholder={contactPage.fields.message}></textarea></label>
+        <p class="ct__err" role="alert" hidden>Please add your name and a valid email.</p>
+        <button class="btn btn--orange ct__send" type="submit">{contactPage.submit} <Icon name="arrow" /></button>
+        <p class="mute ct__note">Opens your email app with your details filled in, addressed to {email}.</p>
+      </form>
+    </div>
+  </section>
+</Base>
+<style>
+  .ct { padding-top: calc(var(--header-h) + var(--strip-h) + clamp(32px, 6vw, 80px)); padding-bottom: clamp(64px, 8vw, 120px); }
+  .ct__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 48px clamp(32px, 5vw, 96px); align-items: start; }
+  .ct__info { display: grid; gap: 24px; }
+  .ct__nums { list-style: none; padding: 0; display: grid; gap: 14px; }
+  .ct__nums a { display: grid; }
+  .ct__n { font-family: var(--font-display); font-stretch: 125%; font-weight: 800; font-size: var(--fs-display-3); line-height: 1.1; transition: color .2s; }
+  .ct__mail { font-size: clamp(1rem, 0.7rem + 1.2vw, 1.6rem); overflow-wrap: anywhere; }
+  .ct__nums a:hover .ct__n { color: var(--orange-hi); }
+  .ct address { font-style: normal; display: grid; }
+  .ct__areas { font-size: .92rem; }
+  .ct__ph { aspect-ratio: 16 / 10; }
+  .ct__form { background: var(--white); color: var(--ink); padding: clamp(22px, 3.4vw, 44px); display: grid; gap: 16px; border-top: 4px solid var(--orange); }
+  fieldset { border: 0; padding: 0; display: grid; gap: 12px; }
+  .ct__ticks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .tick { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: center; padding: 10px 12px; border: 1px solid var(--line); cursor: pointer; font-weight: 550; font-size: .95rem; }
+  .tick input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .tick span { width: 22px; height: 22px; border: 1.5px solid var(--ink-3); display: grid; place-items: center; }
+  .tick svg { width: 16px; height: 16px; opacity: 0; color: var(--black); }
+  .tick:has(input:checked) { border-color: var(--orange); background: rgba(204, 85, 0, .08); }
+  .tick:has(input:checked) span { background: var(--orange); border-color: var(--orange); }
+  .tick:has(input:checked) svg { opacity: 1; }
+  .tick:has(input:focus-visible) { outline: 2px solid var(--orange); outline-offset: 2px; }
+  .fld { display: grid; gap: 6px; font-weight: 600; font-size: .92rem; }
+  .fld input, .fld textarea { border: 1px solid #c9c9cc; padding: 13px 14px; font-weight: 400; font-size: 1rem; border-radius: 2px; background: #fafafa; width: 100%; }
+  .fld input:focus, .fld textarea:focus { outline: 2px solid var(--orange); border-color: var(--orange); }
+  .ct__err { color: #b3261e; font-weight: 600; }
+  .ct__send { justify-self: start; --bh: 56px; }
+  .ct__note { font-size: .85rem; color: var(--ink-3); }
+  @media (max-width: 899px) { .ct__grid { grid-template-columns: minmax(0, 1fr); } .ct__ph { display: none; } }
+  @media (max-width: 480px) { .ct__ticks { grid-template-columns: minmax(0, 1fr); } }
+</style>
+<script>
+  const f = document.querySelector('[data-quote]') as HTMLFormElement | null;
+  if (f) {
+    const want = new URLSearchParams(location.search).get('service');
+    if (want) f.querySelectorAll<HTMLInputElement>('input[name="service"]').forEach((i) => { if (i.dataset.slug === want) i.checked = true; });
+    f.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const d = new FormData(f);
+      const name = String(d.get('name') || '').trim();
+      const email = String(d.get('email') || '').trim();
+      const err = f.querySelector('.ct__err') as HTMLElement;
+      if (!name || !/^\S+@\S+\.\S+$/.test(email)) { err.hidden = false; return; }
+      err.hidden = true;
+      const svc = d.getAll('service').join(', ') || '—';
+      const body = `Name: ${name}\nEmail: ${email}\nPhone: ${d.get('phone') || ''}\nServices: ${svc}\n\n${d.get('message') || ''}`;
+      location.href = `mailto:sales@tavancontractors.co.uk?subject=${encodeURIComponent('Free quote request — ' + svc)}&body=${encodeURIComponent(body)}`;
+    });
+  }
+</script>

@@ -1,0 +1,59 @@
+---
+// The one loud colour moment: Tavan orange. Copy = old "Request A FREE ESTIMATE" band, or a
+// service page's own "Do you require … ? Call or email to arrange a FREE quotation".
+import Icon from './Icon.astro';
+import { phones, home } from '../../data/site';
+import { telHref, mailHref, quoteHref } from '../../data/extra';
+interface Props { question?: [string, string]; line?: string; service?: string; subject?: string }
+const { question, line, service, subject } = Astro.props;
+---
+<section class="eb orange" data-header-theme="light" aria-labelledby="eb-h">
+  <div class="container eb__in">
+    <div class="eb__head">
+      {question ? (
+        <h2 id="eb-h" class="eb__q">
+          <span class="eb__q1">{question[0]}</span>
+          <span class="display d-3">{question[1]}</span>
+        </h2>
+      ) : (
+        <h2 id="eb-h" class="display d-2" data-reveal="lines">
+          <span class="line"><span>{home.estimateHead[0]}</span></span>
+          <span class="line"><span>{home.estimateHead[1]}</span></span>
+        </h2>
+      )}
+      <p class="lead eb__line">{line ?? home.quoteLine}</p>
+    </div>
+    <div class="eb__acts">
+      <a href={quoteHref(service)} class="btn btn--black eb__big" data-magnetic>{question ? 'Online Quote' : home.estimateBtn} <Icon name="arrow" /></a>
+      <a href={telHref()} class="eb__tel">
+        <span class="label">{phones.free.label}</span>
+        <span class="display">{phones.free.display}</span>
+      </a>
+      <div class="eb__more">
+        <a href={telHref(phones.office)} class="ul">{phones.office.label} {phones.office.display}</a>
+        <a href={telHref(phones.mobile)} class="ul">{phones.mobile.label} {phones.mobile.display}</a>
+        <a href={mailHref(subject)} class="ul">Email us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .eb { padding-block: clamp(64px, 8vw, 120px); position: relative; overflow: hidden; }
+  .eb::before {
+    /* tile-course texture: thin horizontal courses, like a roof slope, very faint */
+    content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0.12;
+    background: repeating-linear-gradient(180deg, transparent 0 22px, rgba(0, 0, 0, 0.55) 22px 23px);
+    mask-image: linear-gradient(100deg, transparent 30%, #000 85%);
+  }
+  .eb__in { position: relative; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 40px 64px; align-items: end; }
+  .eb__q { display: grid; gap: 10px; }
+  .eb__q1 { font-size: var(--fs-lead); font-weight: 600; }
+  .eb__line { margin-top: 18px; font-weight: 500; }
+  .eb__acts { display: grid; gap: 22px; justify-items: start; }
+  .eb__big { --bh: 60px; padding: 0 28px; font-size: 1.05rem; }
+  .eb__tel { display: grid; gap: 4px; }
+  .eb__tel .display { font-size: var(--fs-display-3); letter-spacing: 0; }
+  .eb__more { display: flex; flex-wrap: wrap; gap: 8px 22px; font-weight: 600; font-size: 0.95rem; }
+  @media (max-width: 899px) { .eb__in { grid-template-columns: minmax(0, 1fr); } }
+</style>

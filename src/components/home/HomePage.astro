@@ -1,0 +1,30 @@
+---
+// The homepage body. The signature "wow" section is passed in as a slot so the candidates
+// (/wow-a, /wow-b) render on otherwise identical pages.
+import Base from '../../layouts/Base.astro';
+import Hero from './Hero.astro';
+import Intro from './Intro.astro';
+import WhatWeDo from './WhatWeDo.astro';
+import About from './About.astro';
+import Reviews from './Reviews.astro';
+import WorkReel from './WorkReel.astro';
+import EnquiryBand from '../site/EnquiryBand.astro';
+import { home } from '../../data/site';
+import { img } from '../../data/extra';
+interface Props { noindex?: boolean }
+const { noindex = false } = Astro.props;
+---
+<Base title={home.title} description={home.description} headerOverlay noindex={noindex}>
+  <Fragment slot="head">
+    <link rel="preload" as="image" type="image/webp" media="(max-aspect-ratio: 1/1)" imagesrcset={img('863c645').srcset} imagesizes="100vw" fetchpriority="high" />
+    <link rel="preload" as="image" type="image/webp" media="(min-aspect-ratio: 1/1)" imagesrcset={img('e61e908').srcset} imagesizes="100vw" fetchpriority="high" />
+  </Fragment>
+  <Hero />
+  <Intro />
+  <slot />
+  <WhatWeDo />
+  <About />
+  <Reviews />
+  <WorkReel />
+  <EnquiryBand />
+</Base>

@@ -1,0 +1,59 @@
+---
+// Light section after the hero: the old intro copy + facts pulled from the old copy.
+import Img from '../site/Img.astro';
+import { home, services } from '../../data/site';
+const facts = [
+  { n: '100', suf: '+', label: 'man-years of experience and knowledge in the roofing industry' },
+  { n: '1000', suf: ' m²', label: 'office/industrial buildings' },
+  { n: String(services.length), suf: '', label: 'Domestic Services' },
+  { n: 'BS EN', suf: ' 12588', label: 'Lead work standard', text: true },
+];
+---
+<section class="intro paper sec" data-header-theme="light" aria-labelledby="intro-h">
+  <div class="container intro__grid">
+    <div class="intro__copy">
+      <p class="label o" data-reveal="fade">Tavan Contractors</p>
+      <h2 id="intro-h" class="statement" data-reveal="fade">{home.intro[1]}</h2>
+      <div class="prose intro__p" data-reveal="fade" data-delay="0.1">
+        <p>{home.intro[0]}</p>
+        <p>{home.intro[2]}</p>
+      </div>
+    </div>
+    <div class="intro__photos">
+      <div class="ph intro__ph1" data-reveal="photo"><Img id="85dc11e" alt="New clay-tiled roof by Tavan Contractors" sizes="(max-width: 900px) 60vw, 26vw" /></div>
+      <div class="ph intro__ph2" data-reveal="photo" data-delay="0.15"><Img id="d5d1d15" alt="Lead-rolled lantern roof by Tavan Contractors" sizes="(max-width: 900px) 50vw, 20vw" /></div>
+    </div>
+  </div>
+  <div class="container">
+    <ul class="facts" role="list">
+      {facts.map((f) => (
+        <li data-reveal="fade">
+          <p class="display facts__n">{f.text ? <>{f.n}<span class="o">{f.suf}</span></> : <><span data-count={f.n}>{Number(f.n).toLocaleString('en-GB')}</span><span class="o">{f.suf}</span></>}</p>
+          <p class="facts__l">{f.label}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .intro__grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 48px clamp(40px, 6vw, 120px); align-items: start; }
+  .intro__copy { display: grid; gap: 22px; }
+  .intro .statement { max-width: 26ch; }
+  .intro__p { color: var(--ink-2); }
+  .intro__photos { position: relative; min-height: 100%; }
+  .intro__ph1 { width: 78%; aspect-ratio: 4 / 5; margin-left: auto; }
+  .intro__ph2 { position: absolute; left: 0; bottom: -12%; width: 46%; aspect-ratio: 1; border: 8px solid var(--paper); }
+  .facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: clamp(72px, 9vw, 140px); border-top: 1px solid var(--line); }
+  .facts li { padding: 26px 24px 0 0; display: grid; gap: 10px; align-content: start; }
+  .facts li + li { padding-left: 24px; border-left: 1px solid var(--line); }
+  .facts__n { font-size: var(--fs-display-3); letter-spacing: 0; white-space: nowrap; }
+  .facts__l { color: var(--ink-2); font-size: 0.95rem; max-width: 26ch; }
+  @media (max-width: 899px) {
+    .intro__grid { grid-template-columns: minmax(0, 1fr); }
+    .intro__photos { margin-bottom: 12%; }
+    .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .facts li:nth-child(3) { padding-left: 0; border-left: 0; }
+    .facts li:nth-child(n + 3) { border-top: 1px solid var(--line); margin-top: 26px; }
+  }
+</style>

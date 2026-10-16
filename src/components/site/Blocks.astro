@@ -1,0 +1,25 @@
+---
+import Img from './Img.astro';
+import type { Block } from '../../data/site';
+interface Props { blocks: Block[] }
+const { blocks } = Astro.props;
+---
+<div class="blocks">
+  {blocks.map((b) =>
+    b.t === 'p' ? <p>{b.x}</p> :
+    b.t === 'h2' ? <h2>{b.x}</h2> :
+    b.t === 'h3' ? <h3>{b.x}</h3> :
+    b.t === 'ul' ? <ul>{b.x.map((x) => <li>{x}</li>)}</ul> :
+    <figure class="ph"><Img id={b.id} alt={b.alt} sizes="(max-width: 800px) 100vw, 720px" /></figure>
+  )}
+</div>
+<style>
+  .blocks { max-width: 720px; font-size: var(--fs-lead); color: var(--ink-2); }
+  .blocks > * + * { margin-top: 1em; }
+  .blocks h2 { font-family: var(--font-display); font-stretch: 125%; font-weight: 800; text-transform: uppercase; font-size: var(--fs-display-3); color: var(--ink); margin-top: 1.6em; line-height: 1.05; }
+  .blocks h3 { font-weight: 700; font-size: 1.2rem; color: var(--ink); margin-top: 1.4em; }
+  .blocks ul { padding-left: 1.2em; }
+  .blocks li { margin: .4em 0; }
+  .blocks li::marker { color: var(--orange); }
+  .blocks figure { aspect-ratio: 4 / 3; margin-block: 1.6em; }
+</style>

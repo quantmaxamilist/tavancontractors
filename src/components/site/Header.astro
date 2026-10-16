@@ -1,0 +1,169 @@
+---
+import Icon from './Icon.astro';
+import { nav, telHref, mailHref, quoteHref, pad, wrapSlash } from '../../data/extra';
+import { phones, email, areas, services } from '../../data/site';
+interface Props { overlay?: boolean }
+const { overlay = false } = Astro.props;
+const path = Astro.url.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/';
+const isOn = (href: string) => (href === '/' ? path === '/' : path === href || path.startsWith(href + '/'));
+---
+<header id="hdr" class:list={['hdr', { 'hdr--overlay': overlay }]}>
+  <div class="hdr__strip">
+    <div class="container hdr__strip-in">
+      <p class="label hdr__areas">{areas.join(' · ')}</p>
+      <ul class="hdr__nums" role="list">
+        {Object.values(phones).map((p) => (
+          <li><a href={telHref(p)} class="ul"><span class="mute">{p.label}</span> {p.display}</a></li>
+        ))}
+        <li><a href={mailHref()} class="ul">{email}</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container hdr__row">
+    <a href="/" class="hdr__logo" aria-label="Tavan Contractors — home">
+      <img src="/brand/tavan-badge-128.webp" srcset="/brand/tavan-badge-128.webp 128w, /brand/tavan-badge-256.webp 256w" sizes="58px" width="128" height="128" alt="Tavan Contractors — Domestic & Commercial Roofing" />
+    </a>
+    <nav class="hdr__nav" aria-label="Main">
+      <ul role="list">
+        {nav.map((n) => (
+          <li class:list={[{ 'has-sub': !!n.children }]}>
+            <a href={n.href} class:list={['hdr__link', { 'is-on': isOn(n.href) }]} aria-current={isOn(n.href) ? 'page' : undefined}>
+              {n.label}{n.children && <Icon name="chev" class="hdr__chev" />}
+            </a>
+            {n.children && (
+              <div class="hdr__sub">
+                <ol role="list">
+                  {n.children.map((c, i) => (
+                    <li><a href={c.href} class:list={[{ 'is-on': isOn(c.href) }]}><span class="label">{pad(i + 1)}</span>{wrapSlash(c.label)}</a></li>
+                  ))}
+                </ol>
+                <a href="/services" class="arrow-link hdr__suball">All domestic services <Icon name="arrow" /></a>
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <div class="hdr__cta">
+      <a href={telHref()} class="hdr__phone" aria-label={`Call free on ${phones.free.display}`}>
+        <Icon name="phone" />
+        <span><span class="label mute">{phones.free.label}</span><span class="hdr__phone-n">{phones.free.display}</span></span>
+      </a>
+      <a href={quoteHref()} class="btn btn--orange btn--sm hdr__quote">Free quote</a>
+      <button class="hdr__burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu" data-menu-open>
+        <Icon name="menu" />
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="menu" class="menu dark" hidden role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="container menu__top">
+    <a href="/" class="hdr__logo" aria-label="Tavan Contractors — home"><img src="/brand/tavan-badge-128.webp" width="128" height="128" alt="" loading="lazy" /></a>
+    <button class="menu__close" type="button" aria-label="Close menu" data-menu-close><Icon name="close" /></button>
+  </div>
+  <div class="container menu__body">
+    <ul role="list" class="menu__main">
+      <li><a href="/" class="display"><span class="line"><span>Home</span></span></a></li>
+      {nav.map((n) => (
+        <li><a href={n.href} class="display" aria-current={isOn(n.href) ? 'page' : undefined}><span class="line"><span>{n.label}</span></span></a></li>
+      ))}
+    </ul>
+    <ol role="list" class="menu__svc">
+      {services.map((s, i) => (
+        <li><a href={`/services/${s.slug}`}><span class="label o">{pad(i + 1)}</span> {wrapSlash(s.name)}</a></li>
+      ))}
+    </ol>
+    <div class="menu__contact">
+      {Object.values(phones).map((p) => (
+        <a href={telHref(p)} class="menu__tel"><span class="label mute">{p.label}</span>{p.display}</a>
+      ))}
+      <a href={mailHref()} class="menu__tel"><span class="label mute">Email</span>{email}</a>
+      <a href={quoteHref()} class="btn btn--orange">Free quote</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .hdr {
+    position: fixed; inset: 0 0 auto 0; z-index: var(--z-header);
+    color: var(--white);
+    background: rgba(11, 11, 12, 0.94);
+    transition: background-color var(--t-med) ease, transform 0.45s var(--ease-out);
+    will-change: transform;
+  }
+  .hdr--overlay:not(.is-solid) { background: linear-gradient(rgba(11, 11, 12, 0.6), rgba(11, 11, 12, 0)); }
+  @media (min-width: 900px) { .hdr.is-solid { transform: translateY(calc(var(--strip-h) * -1)); } }
+  .hdr.is-hidden { transform: translateY(-100%) !important; }
+
+  .hdr__strip { height: var(--strip-h); border-bottom: 1px solid var(--line-d); overflow: hidden; }
+  .hdr__strip-in { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; font-size: 0.8rem; }
+  .hdr__areas { color: var(--mute); font-size: 0.68rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+  .hdr__nums { display: flex; gap: 22px; list-style: none; padding: 0; white-space: nowrap; }
+  .hdr__nums .mute { margin-right: 4px; }
+  .hdr .mute { color: var(--mute); }
+  @media (max-width: 1180px) { .hdr__areas { display: none; } .hdr__strip-in { justify-content: flex-end; } }
+  @media (max-width: 899px) { .hdr__strip { display: none; } }
+
+  .hdr__row { height: var(--header-h); display: flex; align-items: center; gap: clamp(16px, 2.4vw, 40px); }
+  .hdr__logo { flex: none; display: block; width: 58px; height: 58px; border-radius: 50%; }
+  .hdr__logo img { width: 100%; height: 100%; }
+  @media (max-width: 899px) { .hdr__logo { width: 46px; height: 46px; } }
+
+  .hdr__nav { flex: 1; min-width: 0; }
+  .hdr__nav > ul { display: flex; gap: clamp(14px, 1.8vw, 30px); list-style: none; padding: 0; }
+  .hdr__link { display: inline-flex; align-items: center; gap: 4px; height: var(--header-h); font-weight: 550; font-size: 0.95rem; position: relative; }
+  .hdr__link::after { content: ''; position: absolute; left: 0; right: 0; bottom: 20px; height: 2px; background: var(--orange); transform: scaleX(0); transform-origin: left; transition: transform 0.35s var(--ease-out); }
+  .hdr__link:hover::after, .hdr__link.is-on::after, .has-sub:focus-within > .hdr__link::after { transform: scaleX(1); }
+  .hdr__chev { width: 14px; height: 14px; opacity: 0.7; }
+  .has-sub { position: relative; }
+  .hdr__sub {
+    position: absolute; top: calc(var(--header-h) - 6px); left: -20px; width: 420px; padding: 22px 24px 20px;
+    background: var(--black-2); border: 1px solid var(--line-d); border-top: 2px solid var(--orange);
+    opacity: 0; visibility: hidden; transform: translateY(6px);
+    transition: opacity 0.2s ease, transform 0.25s var(--ease-out), visibility 0s linear 0.25s;
+  }
+  .has-sub:hover .hdr__sub, .has-sub:focus-within .hdr__sub { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+  .hdr__sub ol { columns: 2; column-gap: 22px; list-style: none; padding: 0; }
+  .hdr__sub li { break-inside: avoid; }
+  .hdr__sub li a { display: flex; gap: 10px; align-items: baseline; padding: 7px 0; font-size: 0.93rem; color: #e2e2e5; }
+  .hdr__sub li a:hover, .hdr__sub li a.is-on { color: var(--orange-hi); }
+  .hdr__sub .label { color: var(--orange-hi); font-size: 0.66rem; }
+  .hdr__suball { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line-d); width: 100%; font-size: 0.9rem; }
+
+  .hdr__cta { display: flex; align-items: center; gap: 18px; margin-left: auto; }
+  .hdr__phone { display: inline-flex; align-items: center; gap: 10px; line-height: 1.15; }
+  .hdr__phone > svg { width: 20px; height: 20px; color: var(--orange-hi); }
+  .hdr__phone > span { display: flex; flex-direction: column; }
+  .hdr__phone .label { font-size: 0.62rem; }
+  .hdr__phone-n { font-weight: 650; font-size: 1.02rem; letter-spacing: 0.01em; }
+  .hdr__burger { display: none; width: 44px; height: 44px; place-items: center; }
+  .hdr__burger svg { width: 26px; height: 26px; }
+
+  @media (max-width: 1099px) {
+    .hdr__nav { display: none; }
+    .hdr__burger { display: grid; }
+  }
+  @media (max-width: 599px) {
+    .hdr__cta { gap: 6px; }
+    .hdr__phone { width: 44px; height: 44px; justify-content: center; border: 1.5px solid var(--line-d); border-radius: 50%; }
+    .hdr__phone > span { display: none; }
+    .hdr__quote { --bh: 40px; padding: 0 14px; }
+  }
+
+  /* menu */
+  .menu { position: fixed; inset: 0; z-index: var(--z-menu); overflow-y: auto; overscroll-behavior: contain; display: flex; flex-direction: column; }
+  .menu__top { height: var(--header-h); display: flex; align-items: center; justify-content: space-between; flex: none; }
+  .menu__close { width: 44px; height: 44px; display: grid; place-items: center; }
+  .menu__close svg { width: 28px; height: 28px; }
+  .menu__body { display: grid; gap: 36px; padding-top: 24px; padding-bottom: 40px; }
+  .menu__main { list-style: none; padding: 0; display: grid; gap: 6px; }
+  .menu__main a { font-size: clamp(1.6rem, 7vw, 3rem); }
+  .menu__main a[aria-current='page'] { color: var(--orange-hi); }
+  .menu__svc { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 18px; font-size: 0.98rem; }
+  .menu__svc a { display: flex; gap: 8px; align-items: baseline; color: #dcdcdf; }
+  .menu__contact { display: grid; gap: 14px; }
+  .menu__tel { display: grid; font-size: 1.15rem; font-weight: 600; }
+  .menu__tel .label { font-size: 0.66rem; }
+  .menu .btn { justify-self: start; margin-top: 6px; }
+</style>

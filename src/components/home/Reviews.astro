@@ -1,0 +1,41 @@
+---
+import Icon from '../site/Icon.astro';
+import { reviews, home, ratedPeople } from '../../data/site';
+---
+<section class="rev paper sec" data-header-theme="light" aria-labelledby="rev-h">
+  <div class="container">
+    <div class="rev__head">
+      <h2 id="rev-h" class="display d-2" data-reveal="lines"><span class="line"><span>{home.clientsHead[0]} <span class="o">{home.clientsHead[1]}</span></span></span></h2>
+      <img class="rev__badge" src="/brand/rated-people.webp" width="820" height="231" alt={ratedPeople.alt} loading="lazy" data-reveal="fade" />
+    </div>
+    <ul class="rev__grid" role="list">
+      {reviews.map((r, i) => (
+        <li class="rev__card" data-reveal="fade" data-delay={i * 0.08}>
+          <div class="rev__top">
+            <span class="stars" role="img" aria-label="5 out of 5 stars">{[1, 2, 3, 4, 5].map(() => <Icon name="star" />)}</span>
+            <span class="label mute">{r.date}</span>
+          </div>
+          <p class="label o">{r.job}</p>
+          <blockquote><p>{r.text}</p></blockquote>
+          <p class="rev__who">{r.who}</p>
+        </li>
+      ))}
+    </ul>
+    <div class="rev__foot" data-reveal="fade">
+      <p class="mute">Reviews from Rated People.</p>
+      <a href="/our-work" class="btn btn--black">{home.viewWork} <Icon name="arrow" /></a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .rev__head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+  .rev__badge { width: 220px; height: auto; mix-blend-mode: multiply; }
+  .rev__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 2vw, 28px); margin-top: clamp(32px, 4vw, 56px); }
+  .rev__card { background: var(--white); padding: clamp(22px, 2.6vw, 34px); display: flex; flex-direction: column; gap: 14px; border-top: 4px solid var(--orange); }
+  .rev__top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .rev__card blockquote { font-size: 1.08rem; line-height: 1.55; flex: 1; }
+  .rev__who { font-weight: 700; }
+  .rev__foot { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 32px; flex-wrap: wrap; }
+  @media (max-width: 899px) { .rev__grid { grid-template-columns: minmax(0, 1fr); } }
+</style>

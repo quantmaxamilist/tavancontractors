@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/site/Icon.astro';
+import { phones } from '../data/site';
+import { telHref, quoteHref } from '../data/extra';
+---
+<Base title="Page not found | Tavan Contractors" description="This page could not be found." noindex>
+  <section class="nf dark">
+    <div class="container">
+      <p class="label o">404</p>
+      <h1 class="display d-2">Page not <span class="o">found</span></h1>
+      <div class="nf__acts">
+        <a href="/" class="btn btn--orange">Home <Icon name="arrow" /></a>
+        <a href="/services" class="btn btn--line">Domestic Services</a>
+        <a href={quoteHref()} class="btn btn--line">Free quote</a>
+        <a href={telHref()} class="btn btn--line"><Icon name="phone" /> {phones.free.display}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .nf { min-height: 80svh; display: grid; align-items: center; padding-top: calc(var(--header-h) + var(--strip-h) + 40px); padding-bottom: 80px; }
+  .nf .container { display: grid; gap: 20px; }
+  .nf__acts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+</style>

@@ -1,0 +1,131 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/domestic-roofing-services",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-roofing-services-berks",
+      "destination": "/commercial",
+      "permanent": true
+    },
+    {
+      "source": "/slate-roof-specialist-berkshire",
+      "destination": "/services/slate-roof",
+      "permanent": true
+    },
+    {
+      "source": "/flat-roof-specialist-berkshire",
+      "destination": "/services/flat-roof",
+      "permanent": true
+    },
+    {
+      "source": "/new-roof-specialist-berkshire",
+      "destination": "/services/new-roof",
+      "permanent": true
+    },
+    {
+      "source": "/roof-repair-specialist-berkshire",
+      "destination": "/services/roof-repairs",
+      "permanent": true
+    },
+    {
+      "source": "/lead-work-roof-specialist-berkshire",
+      "destination": "/services/lead-work",
+      "permanent": true
+    },
+    {
+      "source": "/chimney-tavanroofingcontractors",
+      "destination": "/services/chimney-repairs",
+      "permanent": true
+    },
+    {
+      "source": "/fascias-soffits-guttering-berkshire",
+      "destination": "/services/fascias-soffits-guttering",
+      "permanent": true
+    },
+    {
+      "source": "/velux-skylights-berkshire-surrey",
+      "destination": "/services/velux-skylights",
+      "permanent": true
+    },
+    {
+      "source": "/tavan-contractors-clients-gallery",
+      "destination": "/our-work",
+      "permanent": true
+    },
+    {
+      "source": "/tavan-contractors-contact-berkshire",
+      "destination": "/contact",
+      "permanent": true
+    },
+    {
+      "source": "/blog-roofing-specialist-berkshire",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/blog-roofing-specialist-berkshire/tags/chimney-repairs",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/blog-roofing-specialist-berkshire/tags/fascias-gutter-cleaning-and-repair",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/blog-roofing-specialist-berkshire/tags/flat-roof",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/blog-roofing-specialist-berkshire/tags/lead-work",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/blog-roofing-specialist-berkshire/tags/new-roof-installation",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/blog-roofing-specialist-berkshire/tags/roof-repairs",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/blog-roofing-specialist-berkshire/tags/single-ply-flat-roofs",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/blog-roofing-specialist-berkshire/tags/slate-roof",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/blog-roofing-specialist-berkshire/tags/velux-skylight-installation-and-repair",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/post/how-to-choose-a-skylight",
+      "destination": "/blog/how-to-choose-a-skylight",
+      "permanent": true
+    },
+    {
+      "source": "/post/how-to-choose-the-right-roof-for-your-house-or-extension",
+      "destination": "/blog/how-to-choose-the-right-roof-for-your-house-or-extension",
+      "permanent": true
+    },
+    {
+      "source": "/profile/tavancontractorsltd/profile",
+      "destination": "/",
+      "permanent": true
+    }
+  ]
+}

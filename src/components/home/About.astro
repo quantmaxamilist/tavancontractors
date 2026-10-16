@@ -1,0 +1,56 @@
+---
+import Img from '../site/Img.astro';
+import { home } from '../../data/site';
+---
+<section class="about dark sec" data-header-theme="dark" aria-labelledby="about-h">
+  <div class="container about__grid">
+    <div class="ph about__ph" data-reveal="photo"><Img id="0164323" alt="Tavan roofer repairing a chimney stack" sizes="(max-width: 900px) 90vw, 36vw" /></div>
+    <div class="about__copy">
+      <h2 id="about-h" class="display d-2" data-reveal="lines"><span class="line"><span>{home.aboutHead[0]} <span class="o">{home.aboutHead[1]}</span></span></span></h2>
+      <div class="prose lead" data-reveal="fade">
+        {home.about.map((p) => <p>{p}</p>)}
+      </div>
+      <figure class="ba" data-reveal="fade" data-delay="0.1">
+        <div class="ba__frame" style="--x: 50%" data-ba>
+          <img src="/img/lead-before.webp" width="792" height="396" alt="Lead bay canopy before Tavan's repair: weathered, cracked and mossy" loading="lazy" />
+          <img class="ba__after" src="/img/lead-after.webp" width="792" height="396" alt="The same lead bay canopy after Tavan's new lead work" loading="lazy" />
+          <span class="ba__line" aria-hidden="true"><span></span></span>
+          <span class="label ba__tag ba__tag--l" aria-hidden="true">Before</span>
+          <span class="label ba__tag ba__tag--r" aria-hidden="true">After</span>
+          <input type="range" min="0" max="100" value="50" aria-label="Drag to compare before and after" />
+        </div>
+        <figcaption class="label mute">Lead work — before / after</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about__grid { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr); gap: 48px clamp(40px, 6vw, 112px); align-items: start; }
+  .about__ph { aspect-ratio: 3 / 4; position: sticky; top: 120px; }
+  .about__copy { display: grid; gap: 28px; }
+  .ba { display: grid; gap: 12px; margin-top: 12px; }
+  .ba__frame { position: relative; aspect-ratio: 2 / 1; overflow: hidden; user-select: none; touch-action: pan-y; }
+  .ba__frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .ba__after { clip-path: inset(0 0 0 var(--x)); }
+  .ba__line { position: absolute; top: 0; bottom: 0; left: var(--x); width: 2px; margin-left: -1px; background: var(--orange); pointer-events: none; }
+  .ba__line span { position: absolute; top: 50%; left: 50%; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 6px rgba(204, 85, 0, 0.25); }
+  .ba__line span::before, .ba__line span::after { content: ''; position: absolute; top: 50%; width: 0; height: 0; border: 6px solid transparent; margin-top: -6px; }
+  .ba__line span::before { left: 6px; border-right-color: var(--black); }
+  .ba__line span::after { right: 6px; border-left-color: var(--black); }
+  .ba__tag { position: absolute; top: 12px; padding: 4px 8px; background: rgba(11, 11, 12, 0.75); }
+  .ba__tag--l { left: 12px; }
+  .ba__tag--r { right: 12px; }
+  .ba input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: ew-resize; margin: 0; }
+  @media (max-width: 899px) {
+    .about__grid { grid-template-columns: minmax(0, 1fr); }
+    .about__ph { position: relative; top: 0; aspect-ratio: 4 / 3; }
+  }
+</style>
+
+<script>
+  document.querySelectorAll('[data-ba]').forEach((f) => {
+    const input = f.querySelector('input');
+    input?.addEventListener('input', () => f.style.setProperty('--x', input.value + '%'));
+  });
+</script>

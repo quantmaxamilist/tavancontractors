@@ -1,0 +1,22 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/site/PageHero.astro';
+import ServiceCards from '../../components/site/ServiceCards.astro';
+import Gallery from '../../components/site/Gallery.astro';
+import EnquiryBand from '../../components/site/EnquiryBand.astro';
+import { domestic } from '../../data/site';
+---
+<Base title={domestic.title} description={domestic.description}>
+  <PageHero label="Tavan Contractors" heading={domestic.heading} photo={domestic.hero} photoAlt="Re-roofing a family home">
+    <p><strong>{domestic.sub[0]} {domestic.sub[1]}.</strong> {domestic.body[0]}</p>
+    <p>{domestic.body[1]}</p>
+  </PageHero>
+  <section class="paper sec">
+    <div class="container">
+      <h2 class="display d-2" data-reveal="lines" style="margin-bottom: clamp(28px,4vw,52px)"><span class="line"><span>{domestic.servicesHead[0]} <span class="o">{domestic.servicesHead[1]}</span></span></span></h2>
+      <ServiceCards />
+      <div style="margin-top: clamp(48px,6vw,88px)"><Gallery ids={domestic.gallery} alt="Domestic roofing by Tavan Contractors" /></div>
+    </div>
+  </section>
+  <EnquiryBand />
+</Base>

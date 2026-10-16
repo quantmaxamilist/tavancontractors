@@ -1,0 +1,44 @@
+---
+import Base from '../../layouts/Base.astro';
+import Img from '../../components/site/Img.astro';
+import Blocks from '../../components/site/Blocks.astro';
+import EnquiryBand from '../../components/site/EnquiryBand.astro';
+import Icon from '../../components/site/Icon.astro';
+import { posts, services } from '../../data/site';
+export const getStaticPaths = () => posts.map((p) => ({ params: { slug: p.slug }, props: { p } }));
+const { p } = Astro.props;
+const other = posts.find((x) => x.slug !== p.slug)!;
+const svc = services.find((s) => s.slug === p.service);
+const schema = [{ '@context': 'https://schema.org', '@type': 'BlogPosting', headline: p.title, datePublished: p.date, author: { '@type': 'Person', name: p.author } }];
+---
+<Base title={p.title} description={p.description} schema={schema}>
+  <section class="po dark" data-header-theme="dark">
+    <div class="container po__head">
+      <a href="/blog" class="label ul o">← All Posts</a>
+      <h1 class="display d-2" data-reveal="fade">{p.title}</h1>
+      <p class="label mute">{p.author} · <time datetime={p.date}>{p.dateLabel}</time> · {p.read}</p>
+    </div>
+  </section>
+  <div class="paper">
+    <div class="container po__ph-wrap"><div class="ph po__ph"><Img id={p.cover} alt="" eager sizes="(max-width: 1100px) 100vw, 1100px" /></div></div>
+    <article class="container sec po__body">
+      <Blocks blocks={p.blocks} />
+      {p.tags && <p class="po__tags"><span class="label mute">Tags:</span> {p.tags.join(' · ')}</p>}
+      <div class="po__more">
+        {svc && <a href={`/services/${svc.slug}`} class="arrow-link">{svc.name} <Icon name="arrow" /></a>}
+        <a href={`/blog/${other.slug}`} class="arrow-link">{other.title} <Icon name="arrow" /></a>
+      </div>
+    </article>
+  </div>
+  <EnquiryBand />
+</Base>
+<style>
+  .po { padding-top: calc(var(--header-h) + var(--strip-h) + clamp(32px, 6vw, 80px)); padding-bottom: clamp(100px, 12vw, 180px); }
+  .po__head { display: grid; gap: 18px; }
+  .po__head h1 { max-width: 20ch; font-size: clamp(1.75rem, 0.8rem + 3vw, 3.75rem); }
+  .po__ph-wrap { margin-top: clamp(-140px, -9vw, -70px); }
+  .po__ph { aspect-ratio: 21 / 9; max-width: 1100px; }
+  .po__body { padding-top: clamp(40px, 5vw, 72px); }
+  .po__tags { margin-top: 40px; color: var(--ink-2); max-width: 720px; }
+  .po__more { display: grid; gap: 12px; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line); max-width: 720px; }
+</style>

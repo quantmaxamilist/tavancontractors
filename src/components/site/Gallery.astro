@@ -1,0 +1,64 @@
+---
+// Photo grid + lightbox ("Photo 3 of 15"). Only the client's own photos.
+import Img from './Img.astro';
+import Icon from './Icon.astro';
+import { img } from '../../data/extra';
+interface Props { ids: string[]; alt: string }
+const { ids, alt } = Astro.props;
+---
+<div class="gal" data-gallery>
+  {ids.map((id, i) => (
+    <button type="button" class="ph gal__item" data-reveal="fade" data-delay={(i % 4) * 0.05} data-full={img(id).srcset.split(', ').pop()!.split(' ')[0]} aria-label={`Open photo ${i + 1} of ${ids.length}`}>
+      <Img id={id} alt={`${alt} — photo ${i + 1}`} sizes="(max-width: 700px) 46vw, (max-width: 1440px) 23vw, 340px" />
+    </button>
+  ))}
+  <dialog class="lb" aria-label="Photo viewer">
+    <img alt="" />
+    <p class="label lb__n"></p>
+    <button type="button" class="lb__x" data-lb="close" aria-label="Close"><Icon name="close" /></button>
+    <button type="button" class="lb__p" data-lb="prev" aria-label="Previous photo"><Icon name="left" /></button>
+    <button type="button" class="lb__nx" data-lb="next" aria-label="Next photo"><Icon name="right" /></button>
+  </dialog>
+</div>
+<style>
+  .gal { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(6px, 1vw, 14px); }
+  .gal__item { aspect-ratio: 1; display: block; width: 100%; }
+  .gal__item img { transition: transform 0.8s var(--ease-out); }
+  .gal__item:hover img { transform: scale(1.05); }
+  @media (max-width: 700px) { .gal { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .lb { border: 0; padding: 0; background: transparent; max-width: none; max-height: none; width: 100vw; height: 100dvh; color: #fff; }
+  .lb::backdrop { background: rgba(11, 11, 12, 0.95); }
+  .lb img { position: absolute; inset: 60px 70px; width: calc(100% - 140px); height: calc(100% - 120px); object-fit: contain; }
+  .lb__n { position: absolute; left: 24px; top: 22px; }
+  .lb button { position: absolute; width: 48px; height: 48px; display: grid; place-items: center; color: #fff; }
+  .lb button svg { width: 26px; height: 26px; }
+  .lb__x { right: 14px; top: 10px; }
+  .lb__p { left: 10px; top: 50%; }
+  .lb__nx { right: 10px; top: 50%; }
+  @media (max-width: 600px) { .lb img { inset: 60px 8px; width: calc(100% - 16px); } .lb__p, .lb__nx { top: auto !important; bottom: 10px; } }
+</style>
+<script>
+  import { lenis } from '../../scripts/core.js';
+  document.querySelectorAll('[data-gallery]').forEach((g) => {
+    const items = [...g.querySelectorAll('.gal__item')];
+    const dlg = g.querySelector('dialog');
+    const im = dlg.querySelector('img');
+    const n = dlg.querySelector('.lb__n');
+    let i = 0;
+    const show = (k) => {
+      i = (k + items.length) % items.length;
+      im.src = items[i].dataset.full;
+      im.alt = items[i].querySelector('img').alt;
+      n.textContent = `Photo ${i + 1} of ${items.length}`;
+    };
+    const close = () => { if (dlg.open) dlg.close(); lenis?.start(); };
+    items.forEach((b, k) => b.addEventListener('click', () => { show(k); dlg.showModal(); lenis?.stop(); }));
+    dlg.querySelector('[data-lb="close"]').addEventListener('click', close);
+    dlg.querySelector('[data-lb="prev"]').addEventListener('click', () => show(i - 1));
+    dlg.querySelector('[data-lb="next"]').addEventListener('click', () => show(i + 1));
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) close(); });
+    dlg.addEventListener('keydown', (e) => { if (e.key === 'ArrowLeft') show(i - 1); if (e.key === 'ArrowRight') show(i + 1); });
+    dlg.addEventListener('close', () => lenis?.start());
+    dlg.addEventListener('cancel', () => lenis?.start());
+  });
+</script>

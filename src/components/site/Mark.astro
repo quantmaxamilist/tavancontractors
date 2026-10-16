@@ -1,0 +1,11 @@
+---
+// The house/gable silhouette from the Tavan badge, as a simple outline (used for motion only;
+// the real logo badge is the identity everywhere else).
+interface Props { class?: string; stroke?: string }
+const { class: cls, stroke = 'currentColor' } = Astro.props;
+---
+<svg class={cls} viewBox="0 0 64 56" fill="none" aria-hidden="true">
+  <path pathLength="1" d="M4 30 32 4l28 26" stroke={stroke} stroke-width="3.2" stroke-linejoin="miter" />
+  <path pathLength="1" d="M11 24v28h42V24" stroke={stroke} stroke-width="3.2" />
+  <path pathLength="1" d="M27 30h10v10H27zM32 30v10M27 35h10" stroke={stroke} stroke-width="2.4" />
+</svg>

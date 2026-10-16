@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/site/PageHero.astro';
+import Gallery from '../components/site/Gallery.astro';
+import EnquiryBand from '../components/site/EnquiryBand.astro';
+import { work } from '../data/site';
+import images from '../data/images.json';
+// Old gallery order first, then every other Tavan photo used across the old site.
+const rest = Object.keys(images).filter((id) => !work.gallery.includes(id));
+const all = [...work.gallery, ...rest];
+---
+<Base title={work.title} description={work.description}>
+  <PageHero label={`${all.length} photos`} heading={work.heading} photo="e61e908" photoAlt="Completed new-build roof by Tavan Contractors">
+    {work.body.map((p) => <p>{p}</p>)}
+  </PageHero>
+  <section class="paper sec">
+    <div class="container">
+      <h2 class="label mute" style="margin-bottom:20px">Lead work — before / after</h2>
+      <div class="wba" data-reveal="fade">
+        <div><img src="/img/lead-before.webp" width="792" height="396" alt="Lead bay canopy before repair" loading="lazy" /><span class="label">Before</span></div>
+        <div><img src="/img/lead-after.webp" width="792" height="396" alt="Lead bay canopy after Tavan's new lead work" loading="lazy" /><span class="label">After</span></div>
+      </div>
+      <div style="margin-top: clamp(40px,5vw,72px)"><Gallery ids={all} alt="Tavan Contractors roofing work" /></div>
+    </div>
+  </section>
+  <EnquiryBand />
+</Base>
+<style>
+  .wba { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .wba div { position: relative; }
+  .wba .label { position: absolute; left: 10px; top: 10px; background: rgba(11,11,12,.75); color: #fff; padding: 4px 8px; }
+  @media (max-width: 600px) { .wba { grid-template-columns: minmax(0,1fr); } }
+</style>

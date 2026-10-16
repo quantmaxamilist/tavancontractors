@@ -1,0 +1,93 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/site/PageHero.astro';
+import Gallery from '../../components/site/Gallery.astro';
+import EnquiryBand from '../../components/site/EnquiryBand.astro';
+import ServiceCards from '../../components/site/ServiceCards.astro';
+import Img from '../../components/site/Img.astro';
+import Icon from '../../components/site/Icon.astro';
+import { services, reviews } from '../../data/site';
+import { pad } from '../../data/extra';
+export const getStaticPaths = () => services.map((s) => ({ params: { slug: s.slug }, props: { s } }));
+const { s } = Astro.props;
+const i = services.indexOf(s);
+const next = services[(i + 1) % services.length];
+const review = reviews.find((r) => r.service === s.slug);
+---
+<Base title={s.title} description={s.description}>
+  <PageHero label={`Domestic Services · ${pad(i + 1)}`} heading={s.heading} photo={s.hero} photoAlt={`${s.name} by Tavan Contractors`} crumbs={[{ href: '/services', label: 'Domestic Services' }]} service={s.slug} subject={`${s.name} quote`}>
+    {s.kicker && <p><strong>{s.kicker}</strong></p>}
+    <p>{s.body[0]}</p>
+  </PageHero>
+  <section class="paper sec">
+    <div class="container svc">
+      <div class="svc__copy prose">
+        {s.body.slice(1).map((p) => <p data-reveal="fade">{p}</p>)}
+        {s.lists.map((l) => (
+          <div data-reveal="fade">
+            {l.head && <h2 class="svc__h">{l.head}</h2>}
+            <ul class="svc__list" role="list">{l.items.map((x) => <li><Icon name="check" />{x}</li>)}</ul>
+          </div>
+        ))}
+        {s.after?.map((p) => <p data-reveal="fade">{p}</p>)}
+        {s.extraLists?.map((l) => (
+          <div data-reveal="fade">
+            {l.head && <h2 class="svc__h">{l.head}</h2>}
+            <ul class="svc__list" role="list">{l.items.map((x) => <li><Icon name="check" />{x}</li>)}</ul>
+          </div>
+        ))}
+        {s.subsections?.map((x) => <div data-reveal="fade"><h2 class="svc__h">{x.head}</h2><p>{x.body}</p></div>)}
+        {s.slug === 'lead-work' && (
+          <figure class="svc__ba" data-reveal="fade">
+            <div><img src="/img/lead-before.webp" width="792" height="396" alt="Lead bay canopy before repair" loading="lazy" /><span class="label">Before</span></div>
+            <div><img src="/img/lead-after.webp" width="792" height="396" alt="Lead bay canopy after Tavan's new lead work" loading="lazy" /><span class="label">After</span></div>
+          </figure>
+        )}
+      </div>
+      <aside class="svc__side">
+        {review && (
+          <blockquote class="svc__rev" data-reveal="fade">
+            <span class="stars" role="img" aria-label="5 out of 5 stars">{[1, 2, 3, 4, 5].map(() => <Icon name="star" />)}</span>
+            <p class="label o">{review.job} · {review.date}</p>
+            <p>{review.text}</p>
+            <footer>{review.who} <span class="mute">— Rated People</span></footer>
+          </blockquote>
+        )}
+        <div class="ph svc__ph" data-reveal="photo"><Img id={s.gallery[0]} alt={`${s.name} — Tavan Contractors`} sizes="(max-width: 900px) 100vw, 34vw" /></div>
+      </aside>
+    </div>
+    <div class="container" style="margin-top: clamp(48px,6vw,88px)">
+      <p class="label mute" style="margin-bottom: 16px">{s.name} — {s.gallery.length} photos</p>
+      <Gallery ids={s.gallery} alt={`${s.name} by Tavan Contractors`} />
+    </div>
+  </section>
+  <EnquiryBand question={s.ctaQuestion} line={s.ctaLine} service={s.slug} subject={`${s.name} quote`} />
+  <section class="white sec">
+    <div class="container">
+      <a href={`/services/${next.slug}`} class="nxt" data-reveal="fade">
+        <span class="label mute">Next service</span>
+        <span class="display d-2">{next.heading[0]} <span class="o">{next.heading[1]}</span> <Icon name="arrow" /></span>
+      </a>
+      <div style="margin-top: clamp(40px,5vw,72px)"><ServiceCards exclude={s.slug} /></div>
+    </div>
+  </section>
+</Base>
+<style>
+  .svc { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); gap: 48px clamp(40px, 6vw, 112px); align-items: start; }
+  .svc__copy { font-size: var(--fs-lead); color: var(--ink-2); max-width: 64ch; }
+  .svc__h { font-size: 1.25rem; font-weight: 700; color: var(--ink); margin-bottom: 14px; }
+  .svc__list { display: grid; gap: 0; border-top: 1px solid var(--line); list-style: none; padding: 0; }
+  .svc__list li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); color: var(--ink); }
+  .svc__list svg { width: 20px; height: 20px; color: var(--orange); margin-top: 3px; }
+  .svc__side { display: grid; gap: 24px; position: sticky; top: 120px; }
+  .svc__rev { background: var(--white); padding: 26px; border-top: 4px solid var(--orange); display: grid; gap: 12px; }
+  .svc__rev footer { font-weight: 700; }
+  .svc__ph { aspect-ratio: 4 / 5; }
+  .svc__ba { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .svc__ba div { position: relative; }
+  .svc__ba .label { position: absolute; left: 8px; top: 8px; background: rgba(11,11,12,.75); color: #fff; padding: 3px 7px; }
+  .nxt { display: grid; gap: 10px; }
+  .nxt svg { display: inline-block; width: 0.7em; height: 0.7em; vertical-align: middle; transition: transform .35s var(--ease-out); }
+  .nxt:hover svg { transform: translateX(8px); }
+  @media (max-width: 899px) { .svc { grid-template-columns: minmax(0, 1fr); } .svc__side { position: static; } }
+</style>

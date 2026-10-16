@@ -1,0 +1,50 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/site/PageHero.astro';
+import Gallery from '../components/site/Gallery.astro';
+import EnquiryBand from '../components/site/EnquiryBand.astro';
+import Icon from '../components/site/Icon.astro';
+import { commercial, phones } from '../data/site';
+import { telHref, mailHref, quoteHref, pad } from '../data/extra';
+---
+<Base title={commercial.title} description={commercial.description}>
+  <PageHero label={`${commercial.sub[0]} ${commercial.sub[1]}`} heading={commercial.heading} photo={commercial.hero} photoAlt="Tavan roofer on a commercial new-build site" service="commercial" subject="Commercial survey">
+    {commercial.body.map((p) => <p>{p}</p>)}
+  </PageHero>
+  <section class="paper sec">
+    <div class="container">
+      <h2 class="display d-2" data-reveal="lines"><span class="line"><span>{commercial.workWithHead[0]} <span class="o">{commercial.workWithHead[1]}</span></span></span></h2>
+      <ol class="pw" role="list">
+        {commercial.partners.map((p, i) => (
+          <li data-reveal="fade" data-delay={i * 0.06}><span class="label o">{pad(i + 1)}</span><h3 class="display d-3">{p.head}</h3><p>{p.body}</p></li>
+        ))}
+      </ol>
+      <div class="survey dark" data-reveal="fade">
+        <div>
+          <h2 class="display d-3">{commercial.discussHead[0]} <span class="o">{commercial.discussHead[1]}</span></h2>
+          <p class="lead">{commercial.survey}</p>
+        </div>
+        <div class="survey__acts">
+          <a href={quoteHref('commercial')} class="btn btn--orange">{commercial.surveyBtn} <Icon name="arrow" /></a>
+          <a href={mailHref('Commercial survey')} class="btn btn--line"><Icon name="mail" /> {commercial.discussBtn}</a>
+          <a href={telHref()} class="btn btn--line"><Icon name="phone" /> {phones.free.display}</a>
+        </div>
+      </div>
+      <h2 class="display d-2" data-reveal="lines" style="margin: clamp(64px,8vw,120px) 0 clamp(24px,3vw,40px)"><span class="line"><span>{commercial.workHead[0]} <span class="o">{commercial.workHead[1]}</span></span></span></h2>
+      <Gallery ids={commercial.gallery} alt="Commercial roofing by Tavan Contractors" />
+    </div>
+  </section>
+  <EnquiryBand service="commercial" subject="Commercial project" />
+</Base>
+<style>
+  .pw { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin-top: clamp(28px, 4vw, 52px); border-top: 1px solid var(--line); list-style: none; padding: 0; }
+  .pw li { padding: 26px 24px 26px 0; display: grid; gap: 12px; align-content: start; }
+  .pw li + li { padding-left: 24px; border-left: 1px solid var(--line); }
+  .pw .d-3 { font-size: clamp(1.1rem, 0.8rem + 0.9vw, 1.5rem); }
+  .pw p { color: var(--ink-2); }
+  .survey { margin-top: clamp(48px, 6vw, 88px); padding: clamp(28px, 4vw, 56px); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 28px; align-items: center; }
+  .survey .lead { margin-top: 10px; color: #d6d6d9; }
+  .survey__acts { display: flex; flex-wrap: wrap; gap: 10px; }
+  @media (max-width: 1000px) { .pw { grid-template-columns: repeat(2, minmax(0, 1fr)); } .pw li:nth-child(3) { padding-left: 0; border-left: 0; } .survey { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 560px) { .pw { grid-template-columns: minmax(0, 1fr); } .pw li + li { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); } }
+</style>

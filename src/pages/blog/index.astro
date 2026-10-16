@@ -1,0 +1,44 @@
+---
+import Base from '../../layouts/Base.astro';
+import Img from '../../components/site/Img.astro';
+import Icon from '../../components/site/Icon.astro';
+import EnquiryBand from '../../components/site/EnquiryBand.astro';
+import { blog, posts } from '../../data/site';
+---
+<Base title={blog.title} description={blog.description}>
+  <section class="bl dark" data-header-theme="dark">
+    <div class="container">
+      <p class="label o">{blog.allPosts}</p>
+      <h1 class="display d-2" data-reveal="lines"><span class="line"><span>{blog.heading[0]} <span class="o">{blog.heading[1]}</span></span></span></h1>
+      <p class="lead bl__lead">{blog.description}</p>
+    </div>
+  </section>
+  <section class="paper sec">
+    <div class="container bl__grid">
+      {posts.map((p) => (
+        <a href={`/blog/${p.slug}`} class="bl__card" data-reveal="fade">
+          <div class="ph bl__ph"><Img id={p.cover} alt="" sizes="(max-width: 800px) 100vw, 46vw" /></div>
+          <div class="bl__body">
+            <p class="label mute">{p.author} · {p.dateLabel} · {p.read}</p>
+            <h2 class="display d-3">{p.title}</h2>
+            <p>{p.excerpt}</p>
+            <span class="arrow-link">Read post <Icon name="arrow" /></span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+  <EnquiryBand />
+</Base>
+<style>
+  .bl { padding-top: calc(var(--header-h) + var(--strip-h) + clamp(32px, 6vw, 80px)); padding-bottom: clamp(48px, 6vw, 88px); }
+  .bl .container { display: grid; gap: 16px; }
+  .bl__lead { color: #d6d6d9; max-width: 60ch; }
+  .bl__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(20px, 3vw, 40px); }
+  .bl__card { background: var(--white); display: grid; grid-template-rows: auto 1fr; }
+  .bl__ph { aspect-ratio: 16 / 9; }
+  .bl__body { padding: clamp(22px, 3vw, 36px); display: grid; gap: 12px; align-content: start; border-top: 4px solid var(--orange); }
+  .bl__body .d-3 { font-size: clamp(1.25rem, 0.9rem + 1.2vw, 2rem); }
+  .bl__body > p:not(.label) { color: var(--ink-2); }
+  @media (max-width: 800px) { .bl__grid { grid-template-columns: minmax(0, 1fr); } }
+</style>

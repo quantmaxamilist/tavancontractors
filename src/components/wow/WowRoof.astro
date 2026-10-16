@@ -1,0 +1,98 @@
+---
+// Wow A — "The Roof, Assembled": a cut-away house that builds itself (~3s) when it is half on screen.
+// One part per service; the numbered list beside it (under it on phones) links to each service page.
+import Icon from '../site/Icon.astro';
+import { services, domestic } from '../../data/site';
+import { pad, wrapSlash } from '../../data/extra';
+---
+<section class="wow dark sec" data-wow="roof" data-hold-header data-header-theme="dark" aria-labelledby="wow-h">
+  <div class="container wow__grid">
+    <div class="wow__head">
+      <p class="label o">{services.length} Domestic Services</p>
+      <h2 id="wow-h" class="display d-2">{domestic.servicesHead[0]} <span class="o">{domestic.servicesHead[1]}</span></h2>
+      <p class="wow__intro">{domestic.body[1]}</p>
+    </div>
+    <div class="wow__stage">
+      <canvas aria-hidden="true"></canvas>
+      <img class="wow__poster" src="/wow/roof-poster.webp" width="1200" height="960" alt="Cut-away model of a house showing Tavan's eight roofing services" loading="lazy" />
+      <div class="wow__pins" aria-hidden="true">
+        {services.map((s, i) => <span class="wow__pin" data-pin={i} title={s.name}><i></i></span>)}
+      </div>
+      <button class="wow__replay" type="button" data-replay><Icon name="replay" /> Replay</button>
+    </div>
+    <div class="wow__side">
+      <ol class="wow__list" role="list">
+        {services.map((s, i) => (
+          <li data-item={i}>
+            <a href={`/services/${s.slug}`}>
+              <span class="label wow__n">{pad(i + 1)}</span>
+              <span class="wow__name">{wrapSlash(s.name)}</span>
+              <Icon name="arrow" class="wow__arrow" />
+            </a>
+          </li>
+        ))}
+      </ol>
+      <a href="/services" class="arrow-link wow__all">All domestic services <Icon name="arrow" /></a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .wow { overflow: hidden; }
+  .wow__grid {
+    display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+    grid-template-areas: 'head head' 'stage side'; gap: 28px clamp(28px, 4vw, 72px); align-items: center;
+  }
+  .wow__head { grid-area: head; display: grid; gap: 14px; max-width: 760px; }
+  .wow__intro { color: var(--mute); max-width: 56ch; }
+  .wow__stage { grid-area: stage; position: relative; aspect-ratio: 5 / 4; max-height: 74vh; width: 100%; }
+  .wow__stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .wow__poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: none; }
+  .wow.is-static .wow__poster { display: block; }
+  .wow.is-static canvas { display: none; }
+
+  .wow__pins { position: absolute; inset: 0; pointer-events: none; }
+  .wow__pin {
+    position: absolute; left: 0; top: 0; width: 34px; height: 34px; margin: -17px 0 0 -17px;
+    display: grid; place-items: center; pointer-events: auto; cursor: pointer;
+    opacity: 0; transition: opacity 0.4s ease;
+  }
+  .wow__pin i { width: 12px; height: 12px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 4px rgba(204, 85, 0, 0.28), 0 0 0 1px rgba(0, 0, 0, 0.6); transition: transform 0.3s var(--ease-out), box-shadow 0.3s; }
+  .wow__pin.is-on i { transform: scale(1.45); box-shadow: 0 0 0 7px rgba(204, 85, 0, 0.3), 0 0 0 1px rgba(0, 0, 0, 0.6); }
+  .wow.is-done:not(.is-static) .wow__pin { opacity: 1; }
+  .wow.has-active .wow__pin:not(.is-on) { opacity: 0.45; }
+
+  .wow__replay {
+    position: absolute; left: 0; bottom: 0; display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 10px 14px; border: 1px solid var(--line-d); color: var(--mute);
+    opacity: 0; pointer-events: none; transition: opacity 0.4s ease, color 0.2s, border-color 0.2s;
+  }
+  .wow__replay svg { width: 16px; height: 16px; }
+  .wow__replay:hover { color: var(--white); border-color: var(--orange); }
+  .wow.is-done:not(.is-static) .wow__replay { opacity: 1; pointer-events: auto; }
+
+  .wow__side { grid-area: side; display: grid; gap: 22px; }
+  .wow__list { list-style: none; padding: 0; border-top: 1px solid var(--line-d); }
+  .wow__list li { border-bottom: 1px solid var(--line-d); }
+  .wow__list a { display: grid; grid-template-columns: 44px minmax(0, 1fr) 22px; align-items: center; gap: 8px; padding: 13px 0; position: relative; }
+  .wow__n { color: var(--orange-hi); }
+  .wow__name { font-weight: 600; font-size: 1.08rem; transition: transform 0.35s var(--ease-out), color 0.2s; }
+  .wow__arrow { width: 18px; height: 18px; opacity: 0.35; transition: opacity 0.2s, transform 0.35s var(--ease-out); }
+  .wow__list li.is-on .wow__name, .wow__list a:hover .wow__name { color: var(--orange-hi); transform: translateX(6px); }
+  .wow__list li.is-on .wow__arrow { opacity: 1; transform: translateX(3px); }
+
+  /* list + link only appear once the assembly has finished (layout is fixed, only opacity changes) */
+  :global(.rv) .wow:not(.is-done) .wow__side { opacity: 0; visibility: hidden; }
+  .wow__side { transition: opacity 0.5s ease, visibility 0s; }
+
+  @media (max-width: 899px) {
+    .wow__grid { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'head' 'stage' 'side'; }
+    .wow__stage { aspect-ratio: 1 / 1; max-height: none; }
+    .wow__list a { padding: 12px 0; }
+  }
+</style>
+
+<script>
+  import '../../scripts/wow-roof.js';
+</script>

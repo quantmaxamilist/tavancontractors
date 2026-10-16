@@ -1,0 +1,20 @@
+---
+// Responsive photo from /public/img (pre-graded WebP set). Width/height always set → no layout shift.
+import { img } from '../../data/extra';
+interface Props { id: string; alt: string; sizes?: string; class?: string; eager?: boolean; style?: string }
+const { id, alt, sizes = '(max-width: 900px) 100vw, 50vw', class: cls, eager = false, style } = Astro.props;
+const i = img(id);
+---
+<img
+  class={cls}
+  src={i.src}
+  srcset={i.srcset}
+  sizes={sizes}
+  width={i.width}
+  height={i.height}
+  alt={alt}
+  loading={eager ? 'eager' : 'lazy'}
+  decoding={eager ? 'sync' : 'async'}
+  fetchpriority={eager ? 'high' : undefined}
+  style={style}
+/>
